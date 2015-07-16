@@ -1,0 +1,65 @@
+doctype html
+html(ng-app='tip2-web' lang='en')
+  head
+    title Tip2 - in case you need one
+
+    meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    meta(name='viewport' content='width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0')
+    meta(name='description' content='Light-weight real-time (kinda) clipboard share')
+    meta(name='apple-mobile-web-app-capable' content='yes')
+    meta(name='mobile-web-app-capable' content='yes')
+
+    link(rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons|Roboto:300,400,500,700")
+    link(rel="stylesheet" href="/lib/material-design-lite/material.min.css")
+    link(rel="stylesheet" href="/css/app.css")
+
+    script(src='/lib/firebase/firebase.js')
+    script(src='/lib/moment/min/moment.min.js')
+    script(src="/lib/material-design-lite/material.min.js")
+    script(src="/lib/zeroclipboard/dist/ZeroClipboard.js")
+    script(src='/lib/angular/angular.min.js')
+    script(src='/lib/angularfire/dist/angularfire.min.js')
+    script(src='/lib/ng-clip/dest/ng-clip.min.js')
+    script(src='/js/app.js')
+
+    base(href='/')
+  body.mdl-color--grey-100.mdl-color-text--grey-700.mdl-base(ng-controller='MainCtrl as vm')
+   // Always shows a header, even in smaller screens.
+  .mdl-layout.mdl-js-layout.mdl-layout--fixed-header
+    header.mdl-layout__header
+      .mdl-layout__header-row
+        // Title
+        span.mdl-layout-title Tip2
+        // Add spacer, to align navigation to the right
+        .mdl-layout-spacer
+        // Navigation. We hide it in small screens.
+        button#demo-menu-lower-right.mdl-button.mdl-js-button.mdl-button--icon
+          i.material-icons more_vert
+        ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='demo-menu-lower-right')
+          li.mdl-menu__item(clip-copy='vm.copyFirst()') Quick Copy
+          li.mdl-menu__item(disabled='') Disabled
+    button#add.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored.mdl-shadow--4dp.mdl-color--accent(ng-click='vm.paste()')
+      i.material-icons add
+    .mdl-layout__drawer
+      span.mdl-layout-title Nothing
+      nav.mdl-navigation
+        a.mdl-navigation__link(href='') is
+        a.mdl-navigation__link(href='') here
+        a.mdl-navigation__link(href='') yet
+        a.mdl-navigation__link(href='') sosad
+    main.mdl-layout__content
+      .page-content
+        section.section--center.mdl-grid.mdl-grid--no-spacing.section--content-center(ng-hide='vm.copies.done')
+          .mdl-spinner.mdl-js-spinner.is-active
+        section.section--center.mdl-grid.mdl-grid--no-spacing.mdl-shadow--2dp(ng-repeat='copy in vm.copies | orderBy : "-time"')
+          .mdl-card.mdl-cell.mdl-cell--12-col
+            .mdl-card__supporting-text.mdl-grid.mdl-grid--no-spacing
+              .section__text.mdl-cell.mdl-cell--12-col-desktop.mdl-cell--6-col-tablet.mdl-cell--3-col-phone
+                h5 {{vm.formatTime(copy.time)}}
+                p {{copy.text}}
+            .mdl-card__actions
+              a.mdl-button(href='' clip-click-fallback="vm.fallback(copy.text)" clip-copy='copy.text' clip-copy-mime-type="text/plain") Copy
+            .mdl-card__menu
+              button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
+                i.material-icons share

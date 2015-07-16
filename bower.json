@@ -1,0 +1,16 @@
+{
+  "name": "tip2-web",
+  "version": "0.0.1",
+  "authors": [
+    "Tommy Ku <zoo1929@outlook.com>"
+  ],
+  "dependencies": {
+    "firebase": "~2.2.7",
+    "angular": "~1.4.3",
+    "angularfire": "~1.1.2",
+    "material-design-lite": "~1.0.0",
+    "zeroclipboard": "~2.2.0",
+    "ng-clip": "~0.2.6",
+    "moment": "~2.10.3"
+  }
+}
