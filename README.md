@@ -2,6 +2,10 @@
 
 Web-based clipboard making use of Firebase. Built using AngularJS and AngularFire.
 
+## Screenshot
+
+![screenshot](/screenshot.png?raw=true)
+
 ## Installation
 
 1. Take the files out of `dist/`.
