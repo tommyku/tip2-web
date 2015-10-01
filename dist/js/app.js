@@ -1,9 +1,13 @@
 (function() {
   'use strict';
   var Config, MainCtrl, tip2;
-  tip2 = angular.module('tip2-web', ['firebase', 'ngClipboard']);
-  Config = function(ngClipProvider) {
-    return ngClipProvider.setPath("/lib/zeroclipboard/dist/ZeroClipboard.swf");
+  tip2 = angular.module('tip2-web', ['firebase']);
+  Config = function() {
+    var clipboard;
+    clipboard = new Clipboard('.copy-button');
+    return clipboard.on('error', function(e) {
+      return window.prompt('Press cmd+c to copy the text below.', e.text);
+    });
   };
   MainCtrl = function($firebaseArray) {
     var ref, vm;
@@ -29,9 +33,6 @@
         text: content
       });
     };
-    vm.fallback = function(copy) {
-      return window.prompt('Press cmd+c to copy the text below.', copy);
-    };
     vm.copyFirst = function() {
       if (vm.copies.length) {
         return vm.copies[vm.copies.length - 1].text;
@@ -41,6 +42,6 @@
     };
   };
   MainCtrl.$inject = ['$firebaseArray'];
-  Config.$inject = ['ngClipProvider'];
+  Config.$inject = [];
   tip2.config(Config).controller('MainCtrl', MainCtrl);
 })();

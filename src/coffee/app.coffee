@@ -1,10 +1,14 @@
 do ->
   'use strict'
 
-  tip2 = angular.module 'tip2-web', ['firebase', 'ngClipboard']
+  tip2 = angular.module 'tip2-web', ['firebase']
 
-  Config = (ngClipProvider)->
-    ngClipProvider.setPath "/lib/zeroclipboard/dist/ZeroClipboard.swf"
+  Config = ()->
+    clipboard = new Clipboard '.copy-button'
+
+
+    clipboard.on 'error', (e)->
+      window.prompt('Press cmd+c to copy the text below.', e.text);
 
   MainCtrl = ($firebaseArray)->
     ref = new Firebase 'https://<YOUR-FIREBASE-APP>.firebaseio.com'
@@ -27,9 +31,6 @@ do ->
         time: moment().unix(),
         text: content
 
-    vm.fallback = (copy)->
-      window.prompt('Press cmd+c to copy the text below.', copy);
-
     vm.copyFirst = ->
       if vm.copies.length then vm.copies[vm.copies.length-1].text else ''
 
@@ -39,7 +40,7 @@ do ->
     .$inject = ['$firebaseArray']
 
   Config
-    .$inject = ['ngClipProvider']
+    .$inject = []
 
   tip2
     .config Config

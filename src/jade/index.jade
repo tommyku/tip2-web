@@ -17,10 +17,9 @@ html(ng-app='tip2-web' lang='en')
     script(src='/lib/firebase/firebase.js')
     script(src='/lib/moment/min/moment.min.js')
     script(src="/lib/material-design-lite/material.min.js")
-    script(src="/lib/zeroclipboard/dist/ZeroClipboard.js")
+    script(src='/lib/clipboard/dist/clipboard.min.js')
     script(src='/lib/angular/angular.min.js')
     script(src='/lib/angularfire/dist/angularfire.min.js')
-    script(src='/lib/ng-clip/dest/ng-clip.min.js')
     script(src='/js/app.js')
 
     base(href='/')
@@ -37,7 +36,7 @@ html(ng-app='tip2-web' lang='en')
         button#demo-menu-lower-right.mdl-button.mdl-js-button.mdl-button--icon
           i.material-icons more_vert
         ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='demo-menu-lower-right')
-          li.mdl-menu__item(clip-copy='vm.copyFirst()') Quick Copy
+          li.mdl-menu__item.copy-button(data-clipboard-text="{{vm.copyFirst()}}") Quick Copy
           li.mdl-menu__item(disabled='') Disabled
     button#add.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored.mdl-shadow--4dp.mdl-color--accent(ng-click='vm.paste()')
       i.material-icons add
@@ -59,7 +58,7 @@ html(ng-app='tip2-web' lang='en')
                 h5 {{vm.formatTime(copy.time)}}
                 p {{copy.text}}
             .mdl-card__actions
-              a.mdl-button(href='' clip-click-fallback="vm.fallback(copy.text)" clip-copy='copy.text' clip-copy-mime-type="text/plain") Copy
+              a.mdl-button.copy-button(href='' data-clipboard-text="{{copy.text}}") Copy
             .mdl-card__menu
               button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
                 i.material-icons share
