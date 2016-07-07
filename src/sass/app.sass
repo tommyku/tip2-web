@@ -36,11 +36,17 @@ html, body
     &:active
       color: inherit
       background-color: transparent
-&.mdl-demo .mdl-card__supporting-text h4
+.mdl-demo .mdl-card__supporting-text h4
   margin-top: 0
   margin-bottom: 20px
 .mdl-card__supporting-text + .mdl-card__actions
   border-top: 1px solid rgba(0, 0, 0, 0.12)
+.mdl-dialog
+  width: 50%
+  @media (max-width: 600px)
+    width: 90%
+  .mdl-textfield
+    width: 100%
 section
   &.section--content-center
     display: flex

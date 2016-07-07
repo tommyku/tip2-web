@@ -3,18 +3,13 @@ var gulp = require('gulp'),
     rename = require('gulp-rename');
 var autoprefixer = require('gulp-autoprefixer');
 var coffee = require('gulp-coffee');
-var imagemin = require('gulp-imagemin'),
-    cache = require('gulp-cache');
 var sass = require('gulp-sass');
 var jade = require('gulp-jade');
+var connect = require('gulp-connect');
+var argv = require('yargs').argv;
+var gulpif = require('gulp-if');
 
-gulp.task('images', function(){
-  gulp.src('res/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/res/'));
-});
-
-gulp.task('document', function(){
+gulp.task('jade', function(){
   gulp.src(['src/jade/**/*.jade'])
     .pipe(plumber({
       errorHandler: function (error) {
@@ -22,20 +17,33 @@ gulp.task('document', function(){
         this.emit('end');
     }}))
     .pipe(jade({pretty: true}))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('.'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
-
-gulp.task('styles', function(){
+gulp.task('scss', function(){
   gulp.src(['src/sass/**/*.sass'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
         this.emit('end');
     }}))
-    .pipe(sass({indentedSyntax: true}))
+    .pipe(sass({outputStyle: 'compressed'}))
     .pipe(autoprefixer('last 2 versions'))
-    .pipe(gulp.dest('dist/css/'));
+    .pipe(gulp.dest('css/'))
+    .pipe(gulpif(argv.live, connect.reload()))
+});
+
+gulp.task('service-worker', function(){
+  return gulp.src('src/service-worker/service-worker.coffee')
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(coffee({bare: true}))
+    .pipe(gulp.dest('./'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
 gulp.task('scripts', function(){
@@ -46,11 +54,32 @@ gulp.task('scripts', function(){
         this.emit('end');
     }}))
     .pipe(coffee({bare: true}))
-    .pipe(gulp.dest('dist/js/'));
+    .pipe(gulp.dest('js/'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('default', function(){
-  gulp.watch("src/jade/**/*.jade", ['document']);
-  gulp.watch("src/sass/**/*.sass", ['styles']);
+gulp.task('publish', function(){
+  gulp.src(['index.html'], { base: '.' })
+    .pipe(gulp.dest('./publish'));
+  gulp.src(['css/**/*.css'], { base: 'css' })
+    .pipe(gulp.dest('./publish/css'));
+  gulp.src(['js/**/*.js'], { base: 'js' })
+    .pipe(gulp.dest('./publish/js'));
+  gulp.src(['res/**/*'], { base: 'res' })
+    .pipe(gulp.dest('./publish/res'));
+  gulp.src(['lib/**/*'], { base: 'lib' })
+    .pipe(gulp.dest('./publish/lib'));
+});
+
+gulp.task('build', ['jade', 'scss', 'scripts', 'service-worker']);
+
+gulp.task('serve', function() {
+  connect.server({livereload: argv.live});
+});
+
+gulp.task('default', ['serve'], function(){
+  gulp.watch("src/jade/**/*.jade", ['jade']);
+  gulp.watch("src/sass/**/*.sass", ['scss']);
   gulp.watch("src/coffee/**/*.coffee", ['scripts']);
+  gulp.watch("src/service-worker/service-worker.coffee", ['service-worker']);
 });

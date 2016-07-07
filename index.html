@@ -25,41 +25,41 @@
   </body>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <!-- Title--><span class="mdl-layout-title">Tip2</span>
-        <!-- Add spacer, to align navigation to the right-->
-        <div class="mdl-layout-spacer"></div>
-        <!-- Navigation. We hide it in small screens.-->
-        <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">more_vert</i></button>
-        <ul for="demo-menu-lower-right" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect">
-          <li data-clipboard-text="{{vm.copyFirst()}}" class="mdl-menu__item copy-button">Quick Copy</li>
-          <li disabled="" class="mdl-menu__item">Disabled</li>
-        </ul>
-      </div>
+      <div class="mdl-layout__header-row"><span class="mdl-layout-title">Tip2</span></div>
     </header>
     <button id="add" ng-click="vm.paste()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"><i class="material-icons">add</i></button>
-    <div class="mdl-layout__drawer"><span class="mdl-layout-title">Nothing</span>
-      <nav class="mdl-navigation"><a href="" class="mdl-navigation__link">is</a><a href="" class="mdl-navigation__link">here</a><a href="" class="mdl-navigation__link">yet</a><a href="" class="mdl-navigation__link">sosad</a></nav>
-    </div>
     <main class="mdl-layout__content">
       <div class="page-content">
         <section ng-hide="vm.copies.done" class="section--center mdl-grid mdl-grid--no-spacing section--content-center">
           <div class="mdl-spinner mdl-js-spinner is-active"></div>
         </section>
-        <section ng-repeat="copy in vm.copies | orderBy : &quot;-time&quot;" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <section ng-repeat="copy in vm.copies | orderBy : &quot;-time&quot;" on-last-repeat class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <div class="section__text mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                <h5>{{vm.formatTime(copy.time)}}</h5>
-                <p>{{copy.text}}</p>
+                <pre id="copy_text_{{$index}}">{{copy.text}}</pre>
               </div>
             </div>
-            <div class="mdl-card__actions"><a href="" data-clipboard-text="{{copy.text}}" class="mdl-button copy-button">Copy</a></div>
-            <div class="mdl-card__menu">
-              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i class="material-icons">share</i></button>
-            </div>
+            <div class="mdl-card__actions"><a href="javascript:void(0)" data-clipboard-target="#copy_text_{{$index}}" class="mdl-button copy-button">Copy</a></div>
           </div>
         </section>
+        <dialog class="mdl-dialog">
+          <h4 class="mdl-dialog__title">U paste mud 7?</h4>
+          <div class="mdl-dialog__content">
+            <div class="mdl-textfield mdl-js-textfield">
+              <textarea type="text" rows="10" ng-model="vm.content" id="textarea" class="mdl-textfield__input"></textarea>
+              <label for="textarea" class="mdl-textfield__label">Text lines...</label>
+            </div>
+          </div>
+          <div class="mdl-dialog__actions">
+            <button type="button" ng-click="vm.pasteAndCloseDialog()" class="mdl-button">Yeah</button>
+            <button type="button" ng-click="vm.closeDialogOnly()" class="mdl-button close">Nah</button>
+          </div>
+        </dialog>
+      </div>
+      <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button type="button" class="mdl-snackbar__action"></button>
       </div>
     </main>
   </div>
