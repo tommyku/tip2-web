@@ -8,11 +8,7 @@ do ->
 
     clipboard.on 'success', (e)->
       snackbar = document.querySelector('#toast')
-      console.debug snackbar.MaterialSnackbar
       snackbar.MaterialSnackbar.showSnackbar {message: 'Copied to clipboard'}
-      console.info('Action:', e.action)
-      console.info('Text:', e.text)
-      console.info('Trigger:', e.trigger)
       e.clearSelection()
 
     clipboard.on 'error', (e)->
@@ -53,5 +49,11 @@ do ->
   tip2
     .config Config
     .controller 'MainCtrl', MainCtrl
+
+  if(typeof navigator['serviceWorker'] != 'undefined')
+    navigator.serviceWorker
+      .register('./service-worker.js')
+      .then ->
+        console.log('Service Worker Registered')
 
   return

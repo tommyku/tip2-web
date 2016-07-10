@@ -65,6 +65,8 @@ gulp.task('publish', function(){
     .pipe(gulp.dest('./publish/css'));
   gulp.src(['js/**/*.js'], { base: 'js' })
     .pipe(gulp.dest('./publish/js'));
+  gulp.src(['service-worker.js'], { base: '.' })
+    .pipe(gulp.dest('./publish/'));
   gulp.src(['res/**/*'], { base: 'res' })
     .pipe(gulp.dest('./publish/res'));
   gulp.src(['lib/**/*'], { base: 'lib' })
@@ -77,7 +79,7 @@ gulp.task('serve', function() {
   connect.server({livereload: argv.live});
 });
 
-gulp.task('default', ['serve'], function(){
+gulp.task('default', ['build', 'serve'], function(){
   gulp.watch("src/jade/**/*.jade", ['jade']);
   gulp.watch("src/sass/**/*.sass", ['scss']);
   gulp.watch("src/coffee/**/*.coffee", ['scripts']);

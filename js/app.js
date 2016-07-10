@@ -8,13 +8,9 @@
     clipboard.on('success', function(e) {
       var snackbar;
       snackbar = document.querySelector('#toast');
-      console.debug(snackbar.MaterialSnackbar);
       snackbar.MaterialSnackbar.showSnackbar({
         message: 'Copied to clipboard'
       });
-      console.info('Action:', e.action);
-      console.info('Text:', e.text);
-      console.info('Trigger:', e.trigger);
       return e.clearSelection();
     });
     return clipboard.on('error', function(e) {
@@ -54,4 +50,9 @@
   MainCtrl.$inject = ['$firebaseArray'];
   Config.$inject = [];
   tip2.config(Config).controller('MainCtrl', MainCtrl);
+  if (typeof navigator['serviceWorker'] !== 'undefined') {
+    navigator.serviceWorker.register('./service-worker.js').then(function() {
+      return console.log('Service Worker Registered');
+    });
+  }
 })();
